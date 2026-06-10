@@ -1,4 +1,4 @@
-import { useEffect } from "react"; // 1. IMPORTADO O HOOK PARA LOGS DE CARREGAMENTO
+import { useEffect } from "react"; 
 import logo from "./assets/Unipar.png";
 import Patrick from "./assets/image.png";
 
@@ -15,20 +15,55 @@ import { SiVercel } from "react-icons/si";
 import "./App.css";
 
 function App() {
-  // 2. LOG DE INICIALIZAÇÃO (Roda uma vez quando a página carrega)
+  // 1. LOG DE INICIALIZAÇÃO DO CICLO DE VIDA (Roda ao carregar a página)
   useEffect(() => {
     console.log(`[INFO] [${new Date().toISOString()}] Aplicação Iniciada com Sucesso no ambiente de Produção/Homologação.`);
   }, []);
 
-  // 3. FUNÇÃO PARA LOGAR CLIQUE NO BOTÃO PRINCIPAL
+  // 2. LOG + SIMULAÇÃO DE TRACING PARA O BOTÃO PRINCIPAL
   const handleAcessarProjeto = () => {
+    const traceId = "4bf92f3577b34da6a3ce929d0e0e4736"; 
+    const spanId = "00f067aa0ba902b7";
+
+    // Log textual estruturado
     console.log(`[TRACKING] [${new Date().toISOString()}] Usuário clicou no botão 'Acessar Projeto'.`);
-    alert("Redirecionando para o projeto..."); // Mantive uma ação simulada
+    
+    // Objeto de Telemetria/Tracing do Passo 4 (Aparece com a setinha ▶ para expandir no console)
+    console.log(`%c[Telemetry Span: clique_acessar_projeto]`, "color: #00ffca; font-weight: bold;", {
+      traceId: traceId,
+      spanId: spanId,
+      name: "clique_acessar_projeto",
+      duration: "14.2ms",
+      attributes: {
+        "componente.origem": "HeroSection",
+        "projeto.nome": "Devops-Trabalho",
+        "usuario.ambiente": "Browser_Client"
+      }
+    });
+
+    alert("Redirecionando para o projeto..."); 
   };
 
-  // 4. FUNÇÃO PARA LOGAR CLIQUES EM LINKS EXTERNOS (Métricas/Observabilidade)
+  // 3. LOG + SIMULAÇÃO DE TRACING PARA CLIQUES DINÂMICOS NOS LINKS
   const handleTechClick = (techNome) => {
+    // Cria IDs aleatórios para simular a rota dinâmica do Tracing
+    const traceId = Math.random().toString(16).substring(2, 18) + Math.random().toString(16).substring(2, 18);
+    const spanId = Math.random().toString(16).substring(2, 10);
+
+    // Log textual estruturado
     console.log(`[NAVIGATE] [${new Date().toISOString()}] Usuário clicou no link da tecnologia: ${techNome}`);
+    
+    // Objeto de Telemetria/Tracing dinâmico (Aparece com a setinha ▶ para expandir no console)
+    console.log(`%c[Telemetry Span: navegacao_link_externo]`, "color: #00ffca; font-weight: bold;", {
+      traceId: traceId,
+      spanId: spanId,
+      name: "navegacao_link_externo",
+      duration: "5.8ms",
+      attributes: {
+        "destino.nome": techNome,
+        "plataforma": "Vercel_Edge"
+      }
+    });
   };
 
   const tecnologias = [
@@ -81,7 +116,6 @@ function App() {
             desenvolvimento.
           </p>
 
-          {/* ADICIONADO EVENTO DE LOG NO BOTÃO */}
           <button className="botao" onClick={handleAcessarProjeto}>
             Acessar Projeto
           </button>
@@ -97,7 +131,7 @@ function App() {
             target="_blank"
             rel="noreferrer"
             className="patrick-link"
-            onClick={() => handleTechClick("Site UNIPAR")} // LOG DE CLIQUE
+            onClick={() => handleTechClick("Site UNIPAR")} 
           >
             <img src={logo} alt="Unipar" className="sobre-img" />
 
@@ -121,7 +155,7 @@ function App() {
             target="_blank"
             rel="noreferrer"
             className="patrick-link"
-            onClick={() => handleTechClick("Instagram do Professor")} // LOG DE CLIQUE
+            onClick={() => handleTechClick("Instagram do Professor")} 
           >
             <img src={Patrick} alt="Patrick" className="sobre-img" />
 
@@ -153,7 +187,7 @@ function App() {
               target="_blank"
               rel="noreferrer"
               className="tech-card"
-              onClick={() => handleTechClick(tech.nome)} // ADICIONADO LOG DE CLIQUE DINÂMICO
+              onClick={() => handleTechClick(tech.nome)} 
             >
               <div className="icone">{tech.icone}</div>
 
